@@ -80,7 +80,7 @@ namespace NuGetGallery.Services
                                                 signature: signature,
                                                 orphanPackagePolicy: AccountDeletionOrphanPackagePolicy.UnlistOrphans);
                 string expected = $"The account:{testUser.Username} was already deleted. No action was performed.";
-                Assert.Equal<string>(expected, result.Description);
+                Assert.Equal(expected, result.Description);
             }
 
             /// <summary>
@@ -114,13 +114,13 @@ namespace NuGetGallery.Services
                 Assert.Empty(registration.Owners);
                 Assert.Empty(testUser.SecurityPolicies);
                 Assert.Empty(testUser.ReservedNamespaces);
-                Assert.Equal(false, registration.Packages.ElementAt(0).Listed);
+                Assert.False(registration.Packages.ElementAt(0).Listed);
                 Assert.Null(testUser.EmailAddress);
-                Assert.Equal(1, testableService.DeletedAccounts.Count());
+                Assert.Single(testableService.DeletedAccounts);
                 Assert.Equal(signature, testableService.DeletedAccounts.ElementAt(0).Signature);
-                Assert.Equal(1, testableService.SupportRequests.Count());
+                Assert.Single(testableService.SupportRequests);
                 Assert.Empty(testableService.PackageOwnerRequests);
-                Assert.Equal(1, testableService.AuditService.Records.Count());
+                Assert.Single(testableService.AuditService.Records);
                 Assert.Null(testUser.OrganizationMigrationRequest);
                 Assert.Empty(testUser.OrganizationMigrationRequests);
                 Assert.Empty(testUser.OrganizationRequests);
@@ -135,7 +135,7 @@ namespace NuGetGallery.Services
                     }
                     else
                     {
-                        Assert.True(notDeletedMembers.Any(m => m.IsAdmin));
+                        Assert.Contains(notDeletedMembers, m => m.IsAdmin);
                     }
                 }
                 
@@ -161,7 +161,7 @@ namespace NuGetGallery.Services
                 //Assert
                 Assert.True(status.Success);
                 Assert.Null(testableService.User);
-                Assert.Equal(1, testableService.AuditService.Records.Count);
+                Assert.Single(testableService.AuditService.Records);
                 var deleteAccountAuditRecord = testableService.AuditService.Records[0] as DeleteAccountAuditRecord;
                 Assert.NotNull(deleteAccountAuditRecord);
                 Assert.Equal(testUser.Username, deleteAccountAuditRecord.AdminUsername);
@@ -210,13 +210,13 @@ namespace NuGetGallery.Services
                 // Assert
                 Assert.True(status.Success);
                 Assert.Null(organization.EmailAddress);
-                Assert.Equal(0, registration.Owners.Count());
-                Assert.Equal(0, organization.SecurityPolicies.Count());
-                Assert.Equal(0, organization.ReservedNamespaces.Count());
-                Assert.Equal(1, testableService.DeletedAccounts.Count());
-                Assert.Equal(1, testableService.SupportRequests.Count);
-                Assert.Equal(0, testableService.PackageOwnerRequests.Count);
-                Assert.Equal(1, testableService.AuditService.Records.Count);
+                Assert.Empty(registration.Owners);
+                Assert.Empty(organization.SecurityPolicies);
+                Assert.Empty(organization.ReservedNamespaces);
+                Assert.Single(testableService.DeletedAccounts);
+                Assert.Single(testableService.SupportRequests);
+                Assert.Empty(testableService.PackageOwnerRequests);
+                Assert.Single(testableService.AuditService.Records);
                 var deleteRecord = testableService.AuditService.Records[0] as DeleteAccountAuditRecord;
                 Assert.True(deleteRecord != null);
             }
@@ -262,13 +262,13 @@ namespace NuGetGallery.Services
                 // Assert
                 Assert.True(status.Success);
                 Assert.Null(testableService.User);
-                Assert.Equal(0, registration.Owners.Count());
-                Assert.Equal(0, organization.SecurityPolicies.Count());
-                Assert.Equal(0, organization.ReservedNamespaces.Count());
-                Assert.Equal(0, testableService.DeletedAccounts.Count());
-                Assert.Equal(1, testableService.SupportRequests.Count);
-                Assert.Equal(0, testableService.PackageOwnerRequests.Count);
-                Assert.Equal(1, testableService.AuditService.Records.Count);
+                Assert.Empty(registration.Owners);
+                Assert.Empty(organization.SecurityPolicies);
+                Assert.Empty(organization.ReservedNamespaces);
+                Assert.Empty(testableService.DeletedAccounts);
+                Assert.Single(testableService.SupportRequests);
+                Assert.Empty(testableService.PackageOwnerRequests);
+                Assert.Single(testableService.AuditService.Records);
                 var deleteRecord = testableService.AuditService.Records[0] as DeleteAccountAuditRecord;
                 Assert.True(deleteRecord != null);
             }

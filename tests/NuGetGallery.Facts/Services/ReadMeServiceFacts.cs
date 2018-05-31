@@ -284,7 +284,7 @@ namespace NuGetGallery
             public async Task WhenMaxLengthExceeded_ThrowsInvalidOperationException(string sourceType)
             {
                 // Arrange.
-                var request = ReadMeServiceFacts.GetReadMeRequest(ReadMeService.TypeWritten, LargeMarkdown);
+                var request = ReadMeServiceFacts.GetReadMeRequest(sourceType, LargeMarkdown);
 
                 // Act & Assert.
                 await Assert.ThrowsAsync<InvalidOperationException>(() => ReadMeService.GetReadMeMdAsync(request, Encoding.UTF8));
@@ -321,7 +321,7 @@ namespace NuGetGallery
             public async Task WhenInvalidUrl_ThrowsInvalidOperationException(string url)
             {
                 // Arrange.
-                var request = ReadMeServiceFacts.GetReadMeRequest(ReadMeService.TypeUrl, "markdown");
+                var request = ReadMeServiceFacts.GetReadMeRequest(ReadMeService.TypeUrl, "markdown", url: url);
 
                 // Act & Assert.
                 await Assert.ThrowsAsync<ArgumentException>(() => ReadMeService.GetReadMeMdAsync(request, Encoding.UTF8));
